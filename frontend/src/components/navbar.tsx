@@ -17,7 +17,7 @@ import { useSearch } from "@/context/search-context";
 interface User {
   email: string;
   name: string;
-  photo: string;
+  avatar: string;
 }
 export default function Navbar() {
   const router = useRouter();
@@ -111,9 +111,9 @@ export default function Navbar() {
               <div className="w-full h-full animate-pulse repeat-infinite bg-neutral-700 rounded-full"></div>
             )}
 
-            {user?.photo ? (
+            {user?.avatar ? (
               <Image
-                src={user?.photo}
+                src={user?.avatar}
                 alt="avatar-img"
                 width={24}
                 height={24}

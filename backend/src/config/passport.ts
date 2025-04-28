@@ -12,45 +12,44 @@ export const initializePassport = () => {
         scope: ["profile", "email"],
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log("profile :", profile);
-
-        if (profile.emails) {
-          const isUserExists = await User.findOne({
-            email: profile.emails[0].value,
-          });
-
-          console.log("existing user : ", isUserExists);
-          if (!isUserExists) {
-            const newUser = new User({
+        try {
+          if (profile.emails) {
+            const isUserExists = await User.findOne({
               email: profile.emails[0].value,
-              googleId: profile.id,
-              name: profile.displayName,
-              avatar: profile.photos?.[0].value,
             });
 
-            await newUser.save();
+            if (!isUserExists) {
+              const newUser = new User({
+                email: profile.emails[0].value,
+                googleId: profile.id,
+                name: profile.displayName,
+                avatar: profile.photos?.[0].value,
+              });
 
-            console.log("newUser : ", newUser);
+              await newUser.save();
+              return done(null, newUser);
+            }
+            
+            return done(null, isUserExists);
           }
+          return done(new Error("No email found in profile"), undefined);
+        } catch (err) {
+          console.error("Error in Google Strategy:", err);
+          return done(err, undefined);
         }
-
-        const user = {
-          id: profile.id,
-          name: profile.displayName,
-          email: profile.emails?.[0].value,
-          photo: profile.photos?.[0].value,
-        };
-        done(null, user);
       }
     )
   );
 
-  passport.serializeUser((user, done) => {
+  passport.serializeUser((user: any, done) => {
+    console.log("Serializing user:", user);
+    // Store the entire user object in the session
     done(null, user);
   });
 
   passport.deserializeUser((user: any, done) => {
-    console.log("deserialised user : ", user);
+    console.log("Deserializing user:", user);
+    // The user object is already complete, just pass it through
     done(null, user);
   });
 };
