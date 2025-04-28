@@ -50,6 +50,7 @@ sessionStore.on('destroy', (sessionId) => {
 
 app.use(
   session({
+    name: 'connect.sid', // Explicitly set the session cookie name
     secret: process.env.SESSION_SECRET || "SECRET_KEY",
     resave: false,
     saveUninitialized: false,
@@ -58,8 +59,7 @@ app.use(
       maxAge: 7 * 24 * 60 * 60 * 1000,
       secure: true,
       sameSite: 'none',
-      httpOnly: true,
-      domain: '.onrender.com' // Add your backend domain
+      httpOnly: true
     },
   })
 );

@@ -1,22 +1,39 @@
 import { Request, Response } from "express";
+import { Session } from "express-session";
 
-export const passportCallback = (req: Request, res: Response) => {
+interface CustomSession extends Session {
+  user?: any;
+}
+
+export const passportCallback = (req: Request & { session: CustomSession }, res: Response) => {
   try {
     console.log("=== Passport Callback ===");
     console.log("Session ID:", req.sessionID);
     console.log("Session:", req.session);
     console.log("User:", req.user);
     console.log("Is Authenticated:", req.isAuthenticated());
+    console.log("Cookies:", req.cookies);
     
     if (req.user) {
       console.log("User authenticated in callback:", req.user);
-      // Ensure the session is saved before redirect
-      req.session.save((err) => {
+      // Regenerate the session to prevent session fixation
+      req.session.regenerate((err) => {
         if (err) {
-          console.error("Error saving session:", err);
+          console.error("Error regenerating session:", err);
           return res.redirect("https://g-drive-assignment.vercel.app/login");
         }
-        res.redirect("https://g-drive-assignment.vercel.app");
+        
+        // Save the user in the session
+        req.session.user = req.user;
+        
+        // Save the session before redirect
+        req.session.save((err) => {
+          if (err) {
+            console.error("Error saving session:", err);
+            return res.redirect("https://g-drive-assignment.vercel.app/login");
+          }
+          res.redirect("https://g-drive-assignment.vercel.app");
+        });
       });
     } else {
       console.log("No user in callback");
@@ -28,7 +45,7 @@ export const passportCallback = (req: Request, res: Response) => {
   }
 };
 
-export const getUser = (req: Request, res: Response) => {
+export const getUser = (req: Request & { session: CustomSession }, res: Response) => {
   try {
     console.log("=== Get User Request ===");
     console.log("Session ID:", req.sessionID);
