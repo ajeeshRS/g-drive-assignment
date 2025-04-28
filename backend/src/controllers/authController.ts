@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 export const passportCallback = (req: Request, res: Response) => {
   try {
-    res.redirect("http://localhost:3000");
+    res.redirect("https://g-drive-assignment.vercel.app");
   } catch (err) {
     console.error("Error logging in : ", err);
   }

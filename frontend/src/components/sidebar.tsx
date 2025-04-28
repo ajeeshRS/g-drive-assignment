@@ -33,7 +33,7 @@ export default function Sidebar() {
       formData.append("file", file);
 
       const response = await axios.post(
-        "http://localhost:5001/file/upload",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/file/upload`,
         formData,
         { withCredentials: true }
       );
@@ -41,7 +41,7 @@ export default function Sidebar() {
       console.log(response.data);
       if (response.data.success) {
         toast.success(response.data.message);
-        window.location.reload()
+        window.location.reload();
       }
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;
@@ -61,7 +61,9 @@ export default function Sidebar() {
     <>
       {/* hamburger button */}
       <button
-        className={`md:hidden fixed top-5 left-4 z-20 p-2 bg-neutral-900 rounded-lg ${isMobileMenuOpen &&'ml-52 mt-2'}`}
+        className={`md:hidden fixed top-5 left-4 z-20 p-2 bg-neutral-900 rounded-lg ${
+          isMobileMenuOpen && "ml-52 mt-2"
+        }`}
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
         {isMobileMenuOpen ? (
@@ -74,7 +76,9 @@ export default function Sidebar() {
       {/* sidebar */}
       <div
         className={`md:w-1/6 w-[80vw] h-screen flex flex-col items-start justify-start space-y-2 bg-neutral-900 text-white fixed left-0 p-6 z-10 transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          isMobileMenuOpen
+            ? "translate-x-0"
+            : "-translate-x-full md:translate-x-0"
         }`}
       >
         <div className="w-full flex items-center justify-start space-x-3">
