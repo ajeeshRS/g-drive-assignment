@@ -34,6 +34,7 @@ export default function Navbar() {
         { withCredentials: true }
       );
       setUser(response.data.user);
+      console.log("user : ", response.data.user);
     } catch (err) {
       console.error("Error getting user : ", err);
     } finally {
@@ -64,18 +65,20 @@ export default function Navbar() {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
+  
   const debouncedSearchResults = useMemo(() => {
     return debounce(handleSearch, 300);
   }, []);
-
+  
   useEffect(() => {
     return () => {
       debouncedSearchResults.cancel();
     };
+  }, []);
+  
+  useEffect(() => {
+    console.log("Reached fetch user")
+    fetchUser();
   }, []);
   return (
     <nav className="w-full h-20 text-white flex items-center justify-end fixed top-0 bg-neutral-900 z-10">
