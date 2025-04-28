@@ -13,8 +13,10 @@ export const getUser = (req: Request, res: Response) => {
     console.log("i am here");
     console.log(req.user)
     if (req.isAuthenticated()) {
+      console.log("user is authenticated")
       res.json({ status: "true", user: req.user });
     } else {
+      console.log("unauthorised")
       res.json({ status: false, message: "Unauthorized: please login" });
     }
   } catch (err) {
