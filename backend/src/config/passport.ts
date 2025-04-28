@@ -49,8 +49,8 @@ export const initializePassport = () => {
     done(null, user);
   });
 
-  passport.deserializeUser((user, done) => {
+  passport.deserializeUser((user: any, done) => {
     console.log("deserialised user : ", user);
-    done(null, user as null);
+    done(null, user);
   });
 };
