@@ -9,6 +9,7 @@ import { initializePassport } from "./config/passport";
 import { connectDb } from "./config/db";
 import { errorHandler } from "./middlewares/errorHandlers";
 import { authMiddleware } from "./middlewares/middleware";
+import MongoStore from "connect-mongo";
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -24,6 +25,10 @@ app.use(
     secret: process.env.SESSION_SECRET || "SECRET_KEY",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      ttl: 7 * 24 * 60 * 60, // 7 days
+    }),
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === 'production',
