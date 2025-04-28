@@ -79,25 +79,25 @@ export default function Navbar() {
   }, []);
   return (
     <nav className="w-full h-20 text-white flex items-center justify-end fixed top-0 bg-neutral-900 z-10">
-      <div className="w-5/6 flex items-center justify-between pr-6">
-        <div className="w-3/6 relative">
+      <div className="md:w-5/6 w-full flex items-center justify-between pr-6 md:px-5 px-4">
+        <div className="w-3/6 relative flex items-center">
           <input
             type="text"
             placeholder="Search in Drive"
             onChange={debouncedSearchResults}
-            className="bg-neutral-800 text-neutral-300 text-start px-14 py-4 rounded-full w-full placeholder:text-neutral-300  placeholder:pl-2 ml-4 outline-0"
+            className="bg-neutral-800 text-neutral-300 text-start md:px-14 px-10 py-4 rounded-full md:w-full w-[60vw] placeholder:text-neutral-300  placeholder:pl-2 outline-0 md:ml-0 ml-16"
           />
-          <Search className="w-5 h-5 absolute left-8 top-1/2 transform -translate-y-1/2 text-white" />
-          <SlidersHorizontal className="w-5 h-5 absolute right-2 top-1/2 transform -translate-y-1/2 text-white" />
+          <Search className="w-5 h-5 absolute md:left-8 left-20 top-1/2 transform -translate-y-1/2 text-white" />
+          <SlidersHorizontal className="w-5 h-5 absolute right-4 md:block hidden top-1/2 transform -translate-y-1/2 text-white" />
         </div>
         <div className="flex items-center space-x-6">
-          <button>
+          <button className="md:block hidden">
             <HelpCircle className="w-6 h-6" />
           </button>
-          <button>
+          <button className="md:block hidden">
             <Settings className="w-6 h-6" />
           </button>
-          <button>
+          <button className="md:block hidden">
             <Grip className="w-6 h-6" />
           </button>
           <button

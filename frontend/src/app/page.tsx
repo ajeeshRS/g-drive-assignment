@@ -47,7 +47,7 @@ export default function Home() {
   }, [searchResult]);
   return (
     <div className="w-screen min-h-screen flex flex-col items-center justify-center relative bg-neutral-900 ">
-      <div className="w-5/6 h-full fixed right-0 top-20 bg-[#131314] rounded-2xl flex flex-col items-start justify-start p-10">
+      <div className="md:w-5/6 w-full h-full fixed right-0 top-20 bg-[#131314] rounded-2xl flex flex-col items-start justify-start p-10">
         <h3 className="font-medium text-3xl text-white">MyDrive</h3>
         {searchLoading ||
           (loading && (
@@ -56,13 +56,13 @@ export default function Home() {
             </div>
           ))}
         {searchResult && searchResult.length > 0 ? (
-          <div className="w-full h-full overflow-scroll grid grid-cols-5 gap-5 mt-10 p-2 pb-20">
+          <div className="w-full h-full overflow-scroll grid md:grid-cols-5 grid-cols-1 gap-5 mt-10 p-2 pb-20">
             {searchResult.map((fileData, i) => (
               <FileCard key={i} file={fileData} />
             ))}
           </div>
         ) : (
-          <div className="w-full h-full overflow-scroll grid grid-cols-5 gap-5 mt-10 p-2 pb-20">
+          <div className="w-full h-full overflow-scroll grid md:grid-cols-5 grid-cols-1 gap-5 mt-10 p-2 pb-20">
             {files.map((fileData, i) => (
               <FileCard key={i} file={fileData} />
             ))}
