@@ -23,20 +23,43 @@ app.use(
     exposedHeaders: ['Set-Cookie']
   })
 );
+
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGO_URI,
+  ttl: 7 * 24 * 60 * 60, // 7 days
+  autoRemove: 'interval',
+  autoRemoveInterval: 60,
+  touchAfter: 24 * 3600,
+  crypto: {
+    secret: process.env.SESSION_SECRET || "SECRET_KEY"
+  }
+});
+
+// Add event listeners to debug session store
+sessionStore.on('create', (sessionId) => {
+  console.log('Session created:', sessionId);
+});
+
+sessionStore.on('touch', (sessionId) => {
+  console.log('Session touched:', sessionId);
+});
+
+sessionStore.on('destroy', (sessionId) => {
+  console.log('Session destroyed:', sessionId);
+});
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "SECRET_KEY",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
-      ttl: 7 * 24 * 60 * 60, // 7 days
-    }),
+    store: sessionStore,
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       secure: true,
       sameSite: 'none',
-      httpOnly: true
+      httpOnly: true,
+      domain: '.onrender.com' // Add your backend domain
     },
   })
 );

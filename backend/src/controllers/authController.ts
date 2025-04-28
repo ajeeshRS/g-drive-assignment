@@ -10,7 +10,14 @@ export const passportCallback = (req: Request, res: Response) => {
     
     if (req.user) {
       console.log("User authenticated in callback:", req.user);
-      res.redirect("https://g-drive-assignment.vercel.app");
+      // Ensure the session is saved before redirect
+      req.session.save((err) => {
+        if (err) {
+          console.error("Error saving session:", err);
+          return res.redirect("https://g-drive-assignment.vercel.app/login");
+        }
+        res.redirect("https://g-drive-assignment.vercel.app");
+      });
     } else {
       console.log("No user in callback");
       res.redirect("https://g-drive-assignment.vercel.app/login");
@@ -29,6 +36,7 @@ export const getUser = (req: Request, res: Response) => {
     console.log("User:", req.user);
     console.log("Is Authenticated:", req.isAuthenticated());
     console.log("Headers:", req.headers);
+    console.log("Cookies:", req.cookies);
     
     if (req.isAuthenticated()) {
       console.log("User is authenticated");
