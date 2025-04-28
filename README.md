@@ -33,7 +33,7 @@ This is a full-stack application with a Next.js frontend and Node.js/Express bac
 
 3. Create a `.env` file in the backend directory with the following variables:
    ```
-   MONGODB_URI=your_mongodb_connection_string
+   MONGO_URI=your_mongodb_connection_string
    GOOGLE_CLIENT_ID=your_google_client_id
    GOOGLE_CLIENT_SECRET=your_google_client_secret
    SESSION_SECRET=your_session_secret
