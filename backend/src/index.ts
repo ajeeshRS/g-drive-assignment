@@ -16,8 +16,11 @@ const port = process.env.PORT || 5001;
 
 app.use(
   cors({
-    origin: ["https://g-drive-assignment.vercel.app"],
+    origin: "https://g-drive-assignment.vercel.app",
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    exposedHeaders: ['Set-Cookie']
   })
 );
 app.use(
@@ -31,8 +34,8 @@ app.use(
     }),
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       httpOnly: true
     },
   })
