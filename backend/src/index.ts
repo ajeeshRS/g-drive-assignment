@@ -1,20 +1,49 @@
-import express, { Request, Response } from "express";
+import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
+import session from "express-session";
+import passport from "passport";
+import path from "path";
+import authRoutes from "./routes/authRoutes";
+import fileRoutes from "./routes/fileRoutes";
+import { initializePassport } from "./config/passport";
 import { connectDb } from "./config/db";
+import { errorHandler } from "./middlewares/errorHandlers";
+import { authMiddleware } from "./middlewares/middleware";
 
 const app = express();
-const port = 5001;
+const port = process.env.PORT || 5001;
 
-app.use(express.json());
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "SECRET_KEY",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
   })
 );
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("hello");
-});
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+initializePassport();
+
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
+app.use(express.json());
+
+// routes prefix
+app.use("/auth", authRoutes);
+app.use("/file", authMiddleware, fileRoutes);
+
+// error handler
+app.use(errorHandler as ErrorRequestHandler);
 
 const startServer = () => {
   app.listen(port, (err) => {
