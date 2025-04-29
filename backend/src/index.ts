@@ -63,7 +63,7 @@ app.use(
       sameSite: "none",
       httpOnly: true,
       path: "/",
-      domain: ".vercel.app",
+      domain: undefined,
     },
   })
 );
