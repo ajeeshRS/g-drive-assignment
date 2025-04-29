@@ -37,19 +37,6 @@ const sessionStore = MongoStore.create({
   },
 });
 
-// Add event listeners for debugging
-sessionStore.on("create", (sessionId) => {
-  console.log("Session created:", sessionId);
-});
-
-sessionStore.on("touch", (sessionId) => {
-  console.log("Session touched:", sessionId);
-});
-
-sessionStore.on("destroy", (sessionId) => {
-  console.log("Session destroyed:", sessionId);
-});
-
 app.use(
   session({
     name: "sid",

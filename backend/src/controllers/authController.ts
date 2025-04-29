@@ -13,34 +13,19 @@ export const passportCallback = (
   res: Response
 ) => {
   try {
-    console.log("=== Passport Callback ===");
-    console.log("Session ID:", req.sessionID);
-    console.log("Session:", req.session);
-    console.log("User:", req.user);
-    console.log("Is Authenticated:", req.isAuthenticated());
-    console.log("Cookies:", req.cookies);
-
     if (req.isAuthenticated() && req.user) {
-      console.log("User authenticated in callback:", req.user);
-      // Don't regenerate session - it could be losing the passport session data
       req.session.save((err) => {
         if (err) {
           console.error("Error saving session:", err);
           return res.redirect(`${FRONTEND_URL}/login?error=session`);
         }
 
-        // Set a timestamp to confirm session was saved
-        // req.session.lastLogin = new Date().toISOString();
-
-        // Redirect to frontend with success
         res.redirect(`${FRONTEND_URL}?auth=success`);
       });
     } else {
-      console.log("No user in callback");
       res.redirect(`${FRONTEND_URL}/login?error=nouser`);
     }
   } catch (err) {
-    console.error("Error in passport callback:", err);
     res.redirect(`${FRONTEND_URL}/login?error=callback`);
   }
 };
@@ -50,14 +35,6 @@ export const getUser = (
   res: Response
 ) => {
   try {
-    console.log("=== Get User Request ===");
-    console.log("Session ID:", req.sessionID);
-    console.log("Session:", req.session);
-    console.log("User:", req.user);
-    console.log("Is Authenticated:", req.isAuthenticated());
-    console.log("Headers:", req.headers);
-    console.log("Cookies:", req.cookies);
-
     if (req.isAuthenticated() || req.session.user) {
       const user = req.user || req.session.user;
 

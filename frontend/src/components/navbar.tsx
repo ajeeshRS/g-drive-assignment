@@ -39,9 +39,8 @@ export default function Navbar() {
         }
       );
       setUser(response.data.user);
-      console.log("user : ", response.data.user);
     } catch (err) {
-      console.error("Error getting user : ", err);
+      console.error("Couldn't get user details");
     } finally {
       setLoading(false);
     }
@@ -65,10 +64,9 @@ export default function Navbar() {
       );
 
       setSearchLoading(false);
-      console.log("search result : ", response.data);
       setSearchResult(response.data.files);
     } catch (err) {
-      console.error("Some error searching the files : ", err);
+      console.error("Some error searching the files");
       setSearchLoading(false);
     }
   };
@@ -84,7 +82,6 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    console.log("Reached fetch user");
     fetchUser();
   }, []);
   return (

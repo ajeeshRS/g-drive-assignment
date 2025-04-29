@@ -43,15 +43,13 @@ export default function Sidebar() {
         }
       );
 
-      console.log(response.data);
       if (response.data.success) {
         toast.success(response.data.message);
         window.location.reload();
       }
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;
-      console.error("error uploadng file : ", error);
-
+      console.error("error uploadng file");
       toast.error(error.response?.data.message);
     }
   };
