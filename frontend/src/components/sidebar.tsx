@@ -35,7 +35,12 @@ export default function Sidebar() {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/file/upload`,
         formData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       console.log(response.data);

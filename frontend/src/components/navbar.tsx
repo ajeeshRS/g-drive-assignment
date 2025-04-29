@@ -31,7 +31,12 @@ export default function Navbar() {
       setLoading(true);
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/user`,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       setUser(response.data.user);
       console.log("user : ", response.data.user);
@@ -53,6 +58,9 @@ export default function Navbar() {
             searchQuery: value,
           },
           withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -65,19 +73,18 @@ export default function Navbar() {
     }
   };
 
-  
   const debouncedSearchResults = useMemo(() => {
     return debounce(handleSearch, 300);
   }, []);
-  
+
   useEffect(() => {
     return () => {
       debouncedSearchResults.cancel();
     };
   }, []);
-  
+
   useEffect(() => {
-    console.log("Reached fetch user")
+    console.log("Reached fetch user");
     fetchUser();
   }, []);
   return (

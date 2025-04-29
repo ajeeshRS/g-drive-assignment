@@ -10,6 +10,7 @@ export const initializePassport = () => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
         callbackURL: process.env.CALLBACK_URL || "",
         scope: ["profile", "email"],
+        proxy: true,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -29,13 +30,13 @@ export const initializePassport = () => {
               await newUser.save();
               return done(null, newUser);
             }
-            
+
             return done(null, isUserExists);
           }
           return done(new Error("No email found in profile"), undefined);
         } catch (err) {
           console.error("Error in Google Strategy:", err);
-          return done(err, undefined);
+          return done(err as Error, undefined);
         }
       }
     )
@@ -47,7 +48,7 @@ export const initializePassport = () => {
     done(null, user);
   });
 
-  passport.deserializeUser((user: any, done) => {
+  passport.deserializeUser(async (user: any, done) => {
     console.log("Deserializing user:", user);
     // The user object is already complete, just pass it through
     done(null, user);

@@ -10,47 +10,49 @@ import { connectDb } from "./config/db";
 import { errorHandler } from "./middlewares/errorHandlers";
 import { authMiddleware } from "./middlewares/middleware";
 import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const port = process.env.PORT || 5001;
 
+app.use(cookieParser(process.env.SESSION_SECRET || "SECRET_KEY"));
 app.use(
   cors({
     origin: "https://g-drive-assignment.vercel.app",
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie']
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
   })
 );
 
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   ttl: 7 * 24 * 60 * 60, // 7 days
-  autoRemove: 'interval',
+  autoRemove: "interval",
   autoRemoveInterval: 60,
   touchAfter: 24 * 3600,
   crypto: {
-    secret: process.env.SESSION_SECRET || "SECRET_KEY"
-  }
+    secret: process.env.SESSION_SECRET || "SECRET_KEY",
+  },
 });
 
-// Add event listeners to debug session store
-sessionStore.on('create', (sessionId) => {
-  console.log('Session created:', sessionId);
+// Add event listeners for debugging
+sessionStore.on("create", (sessionId) => {
+  console.log("Session created:", sessionId);
 });
 
-sessionStore.on('touch', (sessionId) => {
-  console.log('Session touched:', sessionId);
+sessionStore.on("touch", (sessionId) => {
+  console.log("Session touched:", sessionId);
 });
 
-sessionStore.on('destroy', (sessionId) => {
-  console.log('Session destroyed:', sessionId);
+sessionStore.on("destroy", (sessionId) => {
+  console.log("Session destroyed:", sessionId);
 });
 
 app.use(
   session({
-    name: 'connect.sid', // Explicitly set the session cookie name
+    name: "sid",
     secret: process.env.SESSION_SECRET || "SECRET_KEY",
     resave: false,
     saveUninitialized: false,
@@ -58,8 +60,10 @@ app.use(
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       secure: true,
-      sameSite: 'none',
-      httpOnly: true
+      sameSite: "none",
+      httpOnly: true,
+      path: "/",
+      domain: ".vercel.app",
     },
   })
 );
